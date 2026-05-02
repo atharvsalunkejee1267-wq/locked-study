@@ -270,8 +270,8 @@
       "hint": "Look around the room for number clues.",
       "onSolve": {
         "setState": { "objectId": "safe", "state": "open" },
-        "giveItem": "scrap_note",
-        "message": "Click! The safe opens. Inside you find a scrap note."
+        "giveItem": "magnet",
+        "message": "Click! The safe opens. Inside you find a magnet."
       }
     },
 
@@ -300,8 +300,8 @@
       "hint": "The painting on the wall has three symbols highlighted.",
       "onSolve": {
         "setState": { "objectId": "toolbox", "state": "open" },
-        "giveItem": "magnet",
-        "message": "The toolbox opens! Inside is a horseshoe magnet."
+        "giveItem": "scrap_note",
+        "message": "The toolbox opens! Inside is a scrap note."
       }
     }
   },
