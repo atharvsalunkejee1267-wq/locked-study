@@ -26,7 +26,9 @@
       <!-- SVG-drawn room objects (rendered by room.js) -->
 
       <!-- BOARDED WINDOW -->
-      <div yle="left:15%;top:18%;width:20%;height:38%">
+      <div class="room-object" id="obj-boarded_window"
+           data-id="boarded_window" data-state="boarded"
+           style="left:15%;top:18%;width:20%;height:38%">
         <div class="obj-graphic window-graphic">
           <div class="window-frame">
           </div>
@@ -158,10 +160,10 @@
   <span id="message-text">Click on objects to explore the room...</span>
 </div>
 
-<!-- ═══════════════════════════════════════════
-     PUZZLE OVERLAY
-════════════════════════════════════════════ -->
-<   <div id="puzzle-title"></div>
+<div id="puzzle-overlay" class="hidden">
+  <div id="puzzle-modal">
+    <button id="puzzle-close">✕</button>
+    <div id="puzzle-title"></div>
     <div id="puzzle-instruction"></div>
     <div id="puzzle-content"></div>
     <div id="puzzle-hint"></div>
@@ -169,10 +171,10 @@
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════
-     WIN / LOSE SCREENS
-════════════════════════════════════════════ -->
-<   <h2>YOU ESCAPED!</h2>
+<div id="win-screen" class="hidden">
+  <div class="end-card">
+    <div class="end-icon">🎉</div>
+    <h2>YOU ESCAPED!</h2>
     <p id="win-time"></p>
     <button onclick="location.reload()">Play Again</button>
   </div>
