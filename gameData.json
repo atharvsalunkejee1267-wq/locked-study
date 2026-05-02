@@ -134,7 +134,7 @@
             "requireItem": "crowbar",
             "onSuccess": {
               "setState": "open",
-              "message": "You pry the boards off! Sunlight streams in. You can see a 4-digit number scratched outside: 7392",
+              "message": "You pry the boards off! Sunlight streams in. You can see a 3-digit number scratched outside: 392",
               "giveClue": "clue_window",
               "removeItem": "crowbar"
             }
@@ -313,7 +313,7 @@
     },
     "clue_window": {
       "id": "clue_window",
-      "text": "Number on window sill: 7392"
+      "text": "Number on window sill: 392"
     }
   }
 }
