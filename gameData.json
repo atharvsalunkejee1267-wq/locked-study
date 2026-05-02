@@ -1,0 +1,321 @@
+{
+  "meta": {
+    "title": "The Locked Study",
+    "timerSeconds": 600,
+    "winCondition": "door_open"
+  },
+
+  "rooms": [
+    {
+      "id": "main_room",
+      "label": "The Study",
+      "background": "main_room",
+      "objects": [
+        "door", "safe", "bookshelf", "vase", "boarded_window", "toolbox", "key_hook", "desk"
+      ]
+    }
+  ],
+
+  "objects": {
+    "door": {
+      "id": "door",
+      "label": "Exit Door",
+      "x": 41, "y": 32, "w": 14, "h": 52,
+      "sprite": "door",
+      "state": "locked",
+      "states": {
+        "locked": {
+          "tooltip": "It's locked tight. You need a key.",
+          "cursor": "not-allowed"
+        },
+        "open": {
+          "tooltip": "The door is open! ESCAPE!",
+          "cursor": "pointer",
+          "onInteract": { "action": "WIN" }
+        }
+      },
+      "interactions": {
+        "locked": {
+          "requireItem": "brass_key",
+          "onSuccess": {
+            "setState": "open",
+            "message": "The key fits! The door swings open!",
+            "removeItem": "brass_key",
+            "sfx": "door_unlock"
+          },
+          "onFail": {
+            "message": "The door is locked. Maybe there's a key somewhere."
+          }
+        }
+      }
+    },
+
+    "safe": {
+      "id": "safe",
+      "label": "Metal Safe",
+      "x": 22, "y": 58, "w": 12, "h": 20,
+      "sprite": "safe",
+      "state": "locked",
+      "states": {
+        "locked": {
+          "tooltip": "A combination safe. It needs a 4-digit code.",
+          "cursor": "pointer",
+          "onInteract": { "action": "OPEN_PUZZLE", "puzzleId": "safe_code" }
+        },
+        "open": {
+          "tooltip": "The safe is open.",
+          "cursor": "default"
+        }
+      }
+    },
+
+    "bookshelf": {
+      "id": "bookshelf",
+      "label": "Bookshelf",
+      "x": 58, "y": 38, "w": 12, "h": 50,
+      "sprite": "bookshelf",
+      "state": "intact",
+      "states": {
+        "intact": {
+          "tooltip": "A tall bookshelf full of books. One has a red bookmark.",
+          "cursor": "pointer",
+          "onInteract": { "action": "OPEN_PUZZLE", "puzzleId": "book_order" }
+        },
+        "solved": {
+          "tooltip": "The bookshelf. You already found what was hidden.",
+          "cursor": "default"
+        }
+      }
+    },
+
+    "vase": {
+      "id": "vase",
+      "label": "Decorative Vase",
+      "x": 12, "y": 62, "w": 5, "h": 18,
+      "sprite": "vase",
+      "state": "intact",
+      "states": {
+        "intact": {
+          "tooltip": "It's very fragile.",
+          "cursor": "pointer",
+          "onInteract": {
+            "action": "SMASH",
+            "requireItem": "hammer",
+            "onSuccess": {
+              "setState": "broken",
+              "message": "You smash the vase! A note falls out: 'The safe code starts with 7'",
+              "giveClue": "clue_vase",
+              "removeItem": "hammer"
+            },
+            "onFail": {
+              "message": "You need something to smash it with."
+            }
+          }
+        },
+        "broken": {
+          "tooltip": "Shattered pieces of vase. Nothing more here.",
+          "cursor": "default"
+        }
+      }
+    },
+
+    "boarded_window": {
+      "id": "boarded_window",
+      "label": "Boarded Window",
+      "x": 23, "y": 28, "w": 20, "h": 38,
+      "sprite": "boarded_window",
+      "state": "boarded",
+      "states": {
+        "boarded": {
+          "tooltip": "The window is boarded up with planks.",
+          "cursor": "pointer",
+          "onInteract": {
+            "action": "UNBOARD",
+            "requireItem": "crowbar",
+            "onSuccess": {
+              "setState": "open",
+              "message": "You pry the boards off! Sunlight streams in. You can see a 4-digit number scratched outside: 7392",
+              "giveClue": "clue_window",
+              "removeItem": "crowbar"
+            },
+            "onFail": {
+              "message": "The boards are nailed tight. You need a tool to pry them off."
+            }
+          }
+        },
+        "open": {
+          "tooltip": "The window is open. Warm breeze comes through.",
+          "cursor": "default"
+        }
+      }
+    },
+
+    "toolbox": {
+      "id": "toolbox",
+      "label": "Red Toolbox",
+      "x": 72, "y": 76, "w": 10, "h": 12,
+      "sprite": "toolbox",
+      "state": "closed",
+      "states": {
+        "closed": {
+          "tooltip": "It's closed.",
+          "cursor": "pointer",
+          "onInteract": {
+            "action": "OPEN_PUZZLE",
+            "puzzleId": "toolbox_lock"
+          }
+        },
+        "open": {
+          "tooltip": "The toolbox is open. Already searched.",
+          "cursor": "default"
+        }
+      }
+    },
+
+    "key_hook": {
+      "id": "key_hook",
+      "label": "Key Hook",
+      "x": 85, "y": 40, "w": 5, "h": 8,
+      "sprite": "key_hook",
+      "state": "has_key",
+      "states": {
+        "has_key": {
+          "tooltip": "A wall hook. There's a small key dangling from it — but it's too high to reach.",
+          "cursor": "pointer",
+          "onInteract": {
+            "action": "REACH",
+            "requireItem": "magnet",
+            "onSuccess": {
+              "setState": "empty",
+              "message": "The magnet pulls the key down! You pick up a brass key!",
+              "giveItem": "brass_key",
+              "removeItem": "magnet"
+            },
+            "onFail": {
+              "message": "The key is too high up. You need something to pull it down."
+            }
+          }
+        },
+        "empty": {
+          "tooltip": "An empty key hook on the wall.",
+          "cursor": "default"
+        }
+      }
+    },
+
+    "desk": {
+      "id": "desk",
+      "label": "Wooden Desk",
+      "x": 5, "y": 60, "w": 18, "h": 25,
+      "sprite": "desk",
+      "state": "unsearched",
+      "states": {
+        "unsearched": {
+          "tooltip": "A dusty wooden desk. The drawer is slightly open.",
+          "cursor": "pointer",
+          "onInteract": {
+            "action": "SEARCH",
+            "onSuccess": {
+              "setState": "searched",
+              "message": "The drawer is empty. Nothing useful here."
+            }
+          }
+        },
+        "searched": {
+          "tooltip": "You already searched the desk. The drawer is empty.",
+          "cursor": "default"
+        }
+      }
+    }
+  },
+
+  "items": {
+    "magnet": {
+      "id": "magnet",
+      "label": "Horseshoe Magnet",
+      "icon": "🧲",
+      "description": "A strong horseshoe magnet. Might attract metal objects."
+    },
+    "brass_key": {
+      "id": "brass_key",
+      "label": "Brass Key",
+      "icon": "🗝️",
+      "description": "An old brass key. It might open the front door."
+    },
+    "hammer": {
+      "id": "hammer",
+      "label": "Hammer",
+      "icon": "🔨",
+      "description": "A claw hammer. Good for breaking things."
+    },
+    "crowbar": {
+      "id": "crowbar",
+      "label": "Crowbar",
+      "icon": "🪛",
+      "description": "A heavy iron crowbar. Useful for prying things open."
+    },
+    "scrap_note": {
+      "id": "scrap_note",
+      "label": "Scrap Note",
+      "icon": "📋",
+      "description": "A torn scrap note that reads: 'window holds the answer'."
+    }
+  },
+
+  "puzzles": {
+    "safe_code": {
+      "id": "safe_code",
+      "type": "numpad",
+      "title": "Safe Combination",
+      "digits": 4,
+      "answer": "7392",
+      "hint": "Look around the room for number clues.",
+      "onSolve": {
+        "setState": { "objectId": "safe", "state": "open" },
+        "giveItem": "crowbar",
+        "message": "Click! The safe opens. Inside you find a crowbar!"
+      }
+    },
+
+    "book_order": {
+      "id": "book_order",
+      "type": "sequence",
+      "title": "Book Puzzle",
+      "instruction": "Arrange the books by color: Red → Blue → Green → Yellow",
+      "books": ["Yellow", "Green", "Red", "Blue"],
+      "answer": ["Red", "Blue", "Green", "Yellow"],
+      "hint": "Read the spines — there's a color order written on the shelf.",
+      "onSolve": {
+        "setState": { "objectId": "bookshelf", "state": "solved" },
+        "giveItem": "hammer",
+        "message": "A hidden compartment opens! You find a hammer inside."
+      }
+    },
+
+    "toolbox_lock": {
+      "id": "toolbox_lock",
+      "type": "symbol",
+      "title": "Toolbox Lock",
+      "instruction": "Match the 3 symbols shown on the wall painting.",
+      "symbols": ["★", "▲", "●", "♦", "★", "♦", "●", "▲"],
+      "answer": ["★", "▲", "●"],
+      "hint": "The painting on the wall has three symbols highlighted.",
+      "onSolve": {
+        "setState": { "objectId": "toolbox", "state": "open" },
+        "giveItem": "magnet",
+        "message": "The toolbox opens! Inside is a horseshoe magnet."
+      }
+    }
+  },
+
+  "clues": {
+    "clue_vase": {
+      "id": "clue_vase",
+      "text": "Note from vase: 'Safe code starts with 7'"
+    },
+    "clue_window": {
+      "id": "clue_window",
+      "text": "Number on window sill: 7392"
+    }
+  }
+}

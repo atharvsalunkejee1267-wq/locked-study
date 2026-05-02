@@ -1,0 +1,21 @@
+{
+  "name": "locked-study-escape-room",
+  "version": "1.0.0",
+  "description": "An interactive browser-based escape room puzzle game",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000"
+  },
+  "keywords": [
+    "escape-room",
+    "puzzle-game",
+    "interactive",
+    "javascript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/locked-study.git"
+  }
+}

@@ -1,0 +1,829 @@
+
+
+/* ── Google Fonts ── */
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Bebas+Neue&display=swap');
+
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --wall-dark: #2a2e35;
+  --wall-mid:  #343840;
+  --wall-light:#3d4149;
+  --floor:     #1a3a1a;
+  --wood:      #c8913a;
+  --wood-dark: #9c6d28;
+  --accent:    #e8b84b;
+  --danger:    #cc3333;
+  --success:   #44aa66;
+  --ui-bg:     #1a1c20;
+  --ui-border: #3a3d45;
+  --text-main: #e8e4d8;
+  --text-muted:#8a8880;
+  --radius:    6px;
+  --shadow:    0 4px 20px rgba(0,0,0,0.6);
+}
+
+html, body {
+  height: 100%;
+  background: #111;
+  color: var(--text-main);
+  font-family: 'Courier Prime', monospace;
+  overflow: hidden;
+}
+
+/* ── TOP BAR ── */
+#topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--ui-bg);
+  border-bottom: 1px solid var(--ui-border);
+  padding: 0 20px;
+  height: 52px;
+  flex-shrink: 0;
+  z-index: 10;
+}
+
+#game-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: 3px;
+  color: var(--accent);
+}
+
+#timer-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-main);
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 2px;
+}
+
+#timer-wrap.warning { color: #ff6633; animation: pulse 1s infinite; }
+#timer-wrap.critical { color: #ff2222; }
+
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+
+#topbar-right {
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+}
+
+/* ── GAME LAYOUT ── */
+#game-layout {
+  display: flex;
+  height: calc(100vh - 52px - 44px);
+}
+
+/* ── ROOM WRAP ── */
+#room-wrap {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+#room-scene {
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  /* Full room image with wall and floor combined */
+  background: url('lbrm_mriz_141217.jpg') center center / cover no-repeat;
+}
+
+/* ── ROOM OBJECTS (clickable) ── */
+.room-object {
+  position: absolute;
+  cursor: pointer;
+  transition: filter 0.15s;
+  z-index: 2;
+}
+
+.room-object:hover { filter: brightness(1.25) drop-shadow(0 0 8px rgba(232,184,75,0.5)); }
+.room-object[data-state="broken"],
+.room-object[data-state="open"],
+.room-object[data-state="searched"],
+.room-object[data-state="empty"],
+.room-object[data-state="solved"] {
+  cursor: default;
+}
+.room-object[data-state="broken"]:hover,
+.room-object[data-state="open"]:hover,
+.room-object[data-state="searched"]:hover,
+.room-object[data-state="empty"]:hover,
+.room-object[data-state="solved"]:hover {
+  filter: none;
+}
+
+/* ── OBJECT GRAPHICS ── */
+.obj-graphic { width: 100%; height: 100%; position: relative; }
+
+/* DOOR */
+.door-graphic {
+  background:
+    linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)),
+    url('95uq_yx5e_210617.jpg') center / cover no-repeat;
+  border: 3px solid #8a7a55;
+  border-radius: 4px 4px 0 0;
+  box-shadow: inset -4px 0 8px rgba(0,0,0,0.3), 3px 3px 10px rgba(0,0,0,0.5);
+}
+.door-panel {
+  display: none;
+}
+.door-panel.top { top: 8%; height: 35%; }
+.door-panel.bottom { top: 50%; height: 40%; }
+.door-handle {
+  position: absolute;
+  right: 12%; top: 50%;
+  width: 8%; height: 12%;
+  background: #888;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+}
+#obj-door[data-state="open"] .door-graphic {
+  transform: perspective(300px) rotateY(-35deg);
+  transform-origin: left;
+}
+
+/* BOARDED WINDOW */
+.window-frame {
+  width: 100%; height: 100%;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,0.15), rgba(0,0,0,0.15)),
+    url('17080.jpg') center/cover no-repeat;
+  border: 4px solid #555;
+  position: relative;
+  overflow: hidden;
+}
+
+/* BOOKSHELF */
+.shelf-graphic {
+  background: linear-gradient(90deg, var(--wood-dark), var(--wood));
+  border: 3px solid var(--wood-dark);
+  padding: 8px 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.shelf-unit {
+  display: flex;
+  gap: 3px;
+  flex: 1;
+  align-items: flex-end;
+}
+.shelf-divider {
+  height: 4px;
+  background: var(--wood-dark);
+  margin: 2px 0;
+}
+.book {
+  flex: 1;
+  min-height: 60%;
+  border-radius: 2px 2px 0 0;
+  box-shadow: 1px 0 3px rgba(0,0,0,0.3);
+}
+.book.thick { flex: 1.5; }
+.b-red    { background: linear-gradient(180deg, #cc2200, #991a00); }
+.b-blue   { background: linear-gradient(180deg, #0044cc, #003399); }
+.b-green  { background: linear-gradient(180deg, #228844, #1a6633); }
+.b-yellow { background: linear-gradient(180deg, #ccaa00, #997700); }
+.b-white  { background: linear-gradient(180deg, #e8e0d0, #c8c0b0); }
+
+/* TOOLBOX */
+.toolbox-graphic { display: flex; flex-direction: column; }
+.toolbox-lid {
+  height: 30%;
+  background: linear-gradient(180deg, #dd2222, #991111);
+  border: 2px solid #771111;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+.toolbox-body {
+  flex: 1;
+  background: linear-gradient(180deg, #cc1111, #880000);
+  border: 2px solid #660000;
+  border-top: none;
+  border-radius: 0 0 var(--radius) var(--radius);
+  position: relative;
+}
+.toolbox-latch {
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%,-50%);
+  width: 30%; height: 40%;
+  background: #aaa;
+  border-radius: 2px;
+  border: 1px solid #888;
+}
+#obj-toolbox[data-state="open"] .toolbox-lid { transform: rotateX(-120deg); transform-origin: top; }
+
+/* SAFE */
+.safe-graphic {
+  background: linear-gradient(135deg, #444, #222);
+  border: 3px solid #333;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.safe-body {
+  width: 100%; height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15%;
+  flex-direction: row;
+}
+.safe-dial {
+  width: 35%; aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, #666, #333);
+  border: 3px solid #555;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.5);
+}
+.safe-handle {
+  width: 8%; height: 40%;
+  background: linear-gradient(90deg, #777, #999, #777);
+  border-radius: 4px;
+}
+#obj-safe[data-state="open"] .safe-graphic::after {
+  content: "OPEN";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--success);
+  font-weight: 700;
+}
+
+/* VASE */
+.vase-graphic { position: relative; }
+.vase-body {
+  position: absolute;
+  bottom: 0;
+  left: 10%; width: 80%;
+  height: 70%;
+  background: linear-gradient(135deg, #993355, #661133, #993355);
+  border-radius: 40% 40% 30% 30%;
+  box-shadow: inset -5px 0 10px rgba(0,0,0,0.4);
+}
+.vase-neck {
+  position: absolute;
+  bottom: 70%;
+  left: 25%; width: 50%;
+  height: 20%;
+  background: linear-gradient(135deg, #993355, #661133);
+  border-radius: 3px 3px 0 0;
+}
+#obj-vase[data-state="broken"] .vase-body {
+  clip-path: polygon(10% 0%, 40% 30%, 20% 100%, 80% 100%, 60% 30%, 90% 0%);
+}
+#obj-vase[data-state="broken"] .vase-neck { opacity: 0; }
+
+/* DESK */
+.desk-graphic { position: relative; }
+.desk-top {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 30%;
+  background: linear-gradient(90deg, var(--wood-dark), var(--wood), var(--wood-dark));
+  border-radius: var(--radius) var(--radius) 0 0;
+  border: 2px solid var(--wood-dark);
+}
+.desk-leg {
+  position: absolute;
+  bottom: 0;
+  width: 10%; height: 70%;
+  background: var(--wood-dark);
+}
+.desk-leg.left { left: 5%; }
+.desk-leg.right { right: 5%; }
+.desk-drawer {
+  position: absolute;
+  top: 30%; left: 15%; right: 15%;
+  height: 30%;
+  background: linear-gradient(90deg, var(--wood), #d0a050);
+  border: 2px solid var(--wood-dark);
+  border-radius: 2px;
+}
+.desk-drawer::after {
+  content: '';
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%,-50%);
+  width: 20%; height: 40%;
+  background: #888;
+  border-radius: 2px;
+}
+
+/* KEY HOOK */
+.keyhook-graphic { position: relative; }
+.hook-plate {
+  position: absolute;
+  top: 0; left: 20%; right: 20%;
+  height: 40%;
+  background: #888;
+  border-radius: 3px;
+}
+.hook-peg {
+  position: absolute;
+  top: 35%; left: 50%;
+  transform: translateX(-50%);
+  width: 6px; height: 35%;
+  background: #999;
+  border-radius: 3px;
+}
+.key-hanging {
+  position: absolute;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  font-size: clamp(10px, 2vw, 18px);
+  transition: opacity 0.3s;
+}
+#obj-key_hook[data-state="empty"] .key-hanging { opacity: 0; }
+
+/* ARMCHAIR DECORATION */
+.decoration { position: absolute; z-index: 1; }
+.chair-back {
+  position: absolute;
+  top: 0; left: 10%; right: 10%;
+  height: 55%;
+  background: linear-gradient(135deg, #8b4513, #6b3410);
+  border-radius: var(--radius) var(--radius) 0 0;
+  box-shadow: inset 0 4px 10px rgba(0,0,0,0.3);
+}
+.chair-seat {
+  position: absolute;
+  top: 48%; left: 0; right: 0;
+  height: 30%;
+  background: linear-gradient(180deg, #9b5523, #7b4513);
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+}
+.chair-arm {
+  position: absolute;
+  top: 50%;
+  width: 12%; height: 28%;
+  background: linear-gradient(180deg, #9b5523, #7b4513);
+  border-radius: 3px;
+}
+.chair-arm.left-arm  { left: 0; }
+.chair-arm.right-arm { right: 0; }
+
+/* WALL PAINTING CLUE */
+.wall-painting {
+  pointer-events: none;
+}
+.painting-frame {
+  width: 100%;
+  height: 100%;
+  padding: 7%;
+  border: 3px solid #6f5225;
+  border-radius: 4px;
+  background: linear-gradient(145deg, #9f7a3b, #6f5225);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.45);
+}
+.painting-canvas {
+  width: 100%;
+  height: 100%;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 2px;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,0.12), transparent 40%),
+    linear-gradient(180deg, #2f4254 0%, #21303d 60%, #1a2630 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 6% 8%;
+}
+.painting-symbol-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 1px;
+}
+.painting-symbol-row span {
+  font-size: clamp(12px, 1.6vw, 24px);
+  text-shadow: 0 2px 6px rgba(0,0,0,0.6);
+}
+.painting-symbol-row.faint span {
+  color: rgba(235, 232, 225, 0.38);
+}
+.painting-symbol-row.highlight span {
+  color: #f4d173;
+}
+
+/* ── TOOLTIP ── */
+#tooltip {
+  position: absolute;
+  background: rgba(10,10,14,0.92);
+  color: var(--text-main);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--radius);
+  padding: 8px 14px;
+  font-size: 13px;
+  pointer-events: none;
+  z-index: 100;
+  max-width: 220px;
+  white-space: pre-wrap;
+  display: none;
+  box-shadow: var(--shadow);
+  font-family: 'Courier Prime', monospace;
+}
+
+/* ── INVENTORY PANEL ── */
+#inventory-panel {
+  width: 120px;
+  background: var(--ui-bg);
+  border-left: 1px solid var(--ui-border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+#inv-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 14px;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 12px 0 8px;
+  border-bottom: 1px solid var(--ui-border);
+}
+
+#inv-slots {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px;
+  overflow-y: auto;
+}
+
+.inv-slot {
+  width: 100%;
+  aspect-ratio: 1;
+  background: var(--wall-dark);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  font-size: 28px;
+  position: relative;
+  overflow: hidden;
+}
+
+.inv-slot:hover { border-color: var(--accent); background: #222; }
+.inv-slot.selected { border-color: var(--accent); background: #2a2500; box-shadow: 0 0 8px rgba(232,184,75,0.4); }
+.inv-slot-label {
+  font-size: 9px;
+  color: var(--text-muted);
+  text-align: center;
+  line-height: 1.2;
+  padding: 0 3px;
+  margin-top: 3px;
+}
+.inv-slot-empty { border-style: dashed; opacity: 0.3; }
+
+#inv-description {
+  font-size: 11px;
+  color: var(--text-muted);
+  padding: 8px;
+  border-top: 1px solid var(--ui-border);
+  min-height: 60px;
+  line-height: 1.5;
+}
+
+#clues-section { border-top: 1px solid var(--ui-border); }
+#clues-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--text-muted);
+  text-align: center;
+  padding: 8px 0 4px;
+}
+#clues-list {
+  font-size: 10px;
+  color: var(--accent);
+  padding: 4px 8px 8px;
+  line-height: 1.6;
+  max-height: 80px;
+  overflow-y: auto;
+}
+
+.clue-entry {
+  padding: 6px 8px;
+  margin: 0 0 6px;
+  border: 1px solid rgba(232, 184, 75, 0.25);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.18);
+  color: var(--text-main);
+}
+
+.clue-entry.recent {
+  border-color: var(--accent);
+  background: rgba(232, 184, 75, 0.14);
+  box-shadow: 0 0 10px rgba(232, 184, 75, 0.18);
+}
+
+.clue-empty {
+  color: #555;
+}
+
+/* ── MESSAGE BAR ── */
+#message-bar {
+  height: 44px;
+  background: #0e1012;
+  border-top: 1px solid var(--ui-border);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  font-size: 14px;
+  color: var(--accent);
+  font-family: 'Courier Prime', monospace;
+  letter-spacing: 0.5px;
+}
+
+#message-text {
+  transition: opacity 0.3s;
+}
+
+/* ── PUZZLE OVERLAY ── */
+#puzzle-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(3px);
+}
+
+#puzzle-overlay.hidden { display: none; }
+
+#puzzle-modal {
+  background: var(--ui-bg);
+  border: 1px solid var(--ui-border);
+  border-radius: 10px;
+  padding: 28px 32px;
+  min-width: 340px;
+  max-width: 480px;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+}
+
+#puzzle-close {
+  position: absolute;
+  top: 12px; right: 14px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 18px;
+  cursor: pointer;
+  line-height: 1;
+  transition: color 0.15s;
+}
+#puzzle-close:hover { color: var(--text-main); }
+
+#puzzle-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  letter-spacing: 2px;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+
+#puzzle-instruction {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+#puzzle-content { margin-bottom: 16px; }
+
+/* ── NUMPAD PUZZLE ── */
+.numpad-display {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.numpad-digit {
+  width: 44px; height: 54px;
+  background: var(--wall-dark);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 700;
+  font-family: 'Bebas Neue', sans-serif;
+  color: var(--accent);
+}
+.numpad-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 6px;
+}
+.numpad-btn {
+  padding: 10px 0;
+  background: var(--wall-mid);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--radius);
+  color: var(--text-main);
+  font-size: 16px;
+  font-family: 'Courier Prime', monospace;
+  cursor: pointer;
+  transition: background 0.12s;
+  text-align: center;
+}
+.numpad-btn:hover { background: var(--wall-light); }
+.numpad-btn.delete { color: var(--danger); }
+.numpad-btn.enter  { color: var(--success); font-weight: 700; }
+
+/* ── SEQUENCE PUZZLE (books) ── */
+.book-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.puzzle-book {
+  width: 48px; height: 80px;
+  border-radius: 4px 4px 0 0;
+  cursor: grab;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.8);
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  border: 2px solid rgba(255,255,255,0.2);
+  user-select: none;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.puzzle-book:hover { transform: translateY(-4px); box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
+.puzzle-book.selected { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(232,184,75,0.35); }
+.puzzle-book.dragging { opacity: 0.5; cursor: grabbing; }
+.puzzle-book[data-color="Red"]    { background: linear-gradient(180deg, #cc2200, #991a00); }
+.puzzle-book[data-color="Blue"]   { background: linear-gradient(180deg, #0044cc, #003399); }
+.puzzle-book[data-color="Green"]  { background: linear-gradient(180deg, #228844, #1a6633); }
+.puzzle-book[data-color="Yellow"] { background: linear-gradient(180deg, #ccaa00, #997700); }
+
+.book-slots {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+.book-slot {
+  width: 48px; height: 84px;
+  border: 2px dashed var(--ui-border);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+.book-slot.drag-over { border-color: var(--accent); background: rgba(232,184,75,0.1); }
+
+/* ── SYMBOL PUZZLE ── */
+.symbol-options {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.symbol-btn {
+  width: 52px; height: 52px;
+  background: var(--wall-mid);
+  border: 2px solid var(--ui-border);
+  border-radius: var(--radius);
+  font-size: 22px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.symbol-btn:hover { border-color: var(--accent); }
+.symbol-btn.selected { border-color: var(--accent); background: #2a2500; }
+
+.symbol-answer-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+.symbol-slot {
+  width: 52px; height: 52px;
+  background: var(--wall-dark);
+  border: 1px solid var(--ui-border);
+  border-radius: var(--radius);
+  font-size: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── PUZZLE FEEDBACK ── */
+#puzzle-hint {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 12px;
+  font-style: italic;
+}
+#puzzle-feedback {
+  height: 22px;
+  font-size: 13px;
+  font-weight: 700;
+  margin-top: 8px;
+  text-align: center;
+  transition: opacity 0.3s;
+}
+#puzzle-feedback.success { color: var(--success); }
+#puzzle-feedback.error   { color: var(--danger); }
+
+.puzzle-submit-btn {
+  display: block;
+  width: 100%;
+  margin-top: 14px;
+  padding: 11px;
+  background: var(--wood-dark);
+  border: none;
+  border-radius: var(--radius);
+  color: var(--text-main);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.puzzle-submit-btn:hover { background: var(--wood); }
+
+/* ── WIN / LOSE SCREENS ── */
+#win-screen, #lose-screen {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.88);
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#win-screen.hidden, #lose-screen.hidden { display: none; }
+
+.end-card {
+  text-align: center;
+  padding: 48px 64px;
+  background: var(--ui-bg);
+  border: 1px solid var(--ui-border);
+  border-radius: 12px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.9);
+}
+.end-icon { font-size: 64px; margin-bottom: 16px; }
+.end-card h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 48px;
+  letter-spacing: 4px;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+.end-card p {
+  color: var(--text-muted);
+  margin-bottom: 28px;
+  font-size: 14px;
+}
+.end-card button {
+  padding: 12px 36px;
+  background: var(--wood-dark);
+  border: none;
+  border-radius: var(--radius);
+  color: var(--text-main);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.end-card button:hover { background: var(--wood); }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--ui-border); border-radius: 2px; }

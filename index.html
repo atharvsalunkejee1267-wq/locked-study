@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Locked Study — Escape Room</title>
+  <link rel="stylesheet" href="room.css" />
+</head>
+<body>
+
+<div id="topbar">
+  <div id="game-title">🔒 THE LOCKED STUDY</div>
+  <div id="timer-wrap">
+    <span id="timer-icon">⏱</span>
+    <span id="timer-display">10:00</span>
+  </div>
+  <div id="topbar-right">ITEMS</div>
+</div>
+
+<div id="game-layout">
+
+  <!-- ROOM SCENE -->
+  <div id="room-wrap">
+    <div id="room-scene">
+
+      <!-- SVG-drawn room objects (rendered by room.js) -->
+
+      <!-- BOARDED WINDOW -->
+      <div yle="left:15%;top:18%;width:20%;height:38%">
+        <div class="obj-graphic window-graphic">
+          <div class="window-frame">
+          </div>
+        </div>
+      </div>
+
+      <!-- DOOR -->
+      <div class="room-object" id="obj-door"
+           data-id="door" data-state="locked"
+           style="left:41%;top:15%;width:14%;height:54%">
+        <div class="obj-graphic door-graphic">
+          <div class="door-panel top"></div>
+          <div class="door-panel bottom"></div>
+          <div class="door-handle"></div>
+        </div>
+      </div>
+
+      <!-- BOOKSHELF -->
+      <div class="room-object" id="obj-bookshelf"
+           data-id="bookshelf" data-state="intact"
+           style="left:58%;top:36%;width:12%;height:53%">
+        <div class="obj-graphic shelf-graphic">
+          <div class="shelf-unit">
+            <div class="book b-red"></div>
+            <div class="book b-blue"></div>
+            <div class="book b-green"></div>
+            <div class="book b-yellow"></div>
+          </div>
+          <div class="shelf-divider"></div>
+          <div class="shelf-unit bottom">
+            <div class="book b-white thick"></div>
+            <div class="book b-white thick"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOOLBOX -->
+      <div class="room-object" id="obj-toolbox"
+           data-id="toolbox" data-state="closed"
+           style="left:71%;top:75%;width:11%;height:13%">
+        <div class="obj-graphic toolbox-graphic">
+          <div class="toolbox-lid"></div>
+          <div class="toolbox-body">
+            <div class="toolbox-latch"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SAFE  -->
+      <div class="room-object" id="obj-safe"
+           data-id="safe" data-state="locked"
+           style="left:24%;top:62%;width:11%;height:22%">
+        <div class="obj-graphic safe-graphic">
+          <div class="safe-body">
+            <div class="safe-dial"></div>
+            <div class="safe-handle"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VASE -->
+      <div class="room-object" id="obj-vase"
+           data-id="vase" data-state="intact"
+           style="left:12%;top:58%;width:5%;height:18%">
+        <div class="obj-graphic vase-graphic">
+          <div class="vase-body"></div>
+          <div class="vase-neck"></div>
+        </div>
+      </div>
+
+      <!-- DESK -->
+      <div class="room-object" id="obj-desk"
+           data-id="desk" data-state="unsearched"
+           style="left:4%;top:67%;width:18%;height:16%">
+        <div class="obj-graphic desk-graphic">
+          <div class="desk-top"></div>
+          <div class="desk-leg left"></div>
+          <div class="desk-leg right"></div>
+          <div class="desk-drawer"></div>
+        </div>
+      </div>
+
+      <!-- KEY HOOK -->
+      <div class="room-object" id="obj-key_hook"
+           data-id="key_hook" data-state="has_key"
+           style="left:90%;top:35%;width:4%;height:8%">
+        <div class="obj-graphic keyhook-graphic">
+          <div class="hook-plate"></div>
+          <div class="hook-peg"></div>
+          <div class="key-hanging">🗝</div>
+        </div>
+      </div>
+
+      <!-- WALL PAINTING CLUE (for toolbox symbols) -->
+      <div class="decoration wall-painting"
+           style="left:73%;top:24%;width:14%;height:20%"
+           aria-label="Wall painting with highlighted symbols">
+        <div class="painting-frame">
+          <div class="painting-canvas">
+            <div class="painting-symbol-row faint">
+              <span>♦</span><span>●</span><span>★</span>
+            </div>
+            <div class="painting-symbol-row highlight">
+              <span>★</span><span>▲</span><span>●</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOOLTIP -->
+      <div id="tooltip"></div>
+
+    </div><!-- /room-scene -->
+  </div><!-- /room-wrap -->
+
+  <div id="inventory-panel">
+    <div id="inv-title">ITEMS</div>
+    <div id="inv-slots"></div>
+    <div id="inv-description"></div>
+    <div id="clues-section">
+      <div id="clues-title">CLUES</div>
+      <div id="clues-list"></div>
+    </div>
+  </div>
+
+</div><!-- /game-layout -->
+
+<div id="message-bar">
+  <span id="message-text">Click on objects to explore the room...</span>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     PUZZLE OVERLAY
+════════════════════════════════════════════ -->
+<   <div id="puzzle-title"></div>
+    <div id="puzzle-instruction"></div>
+    <div id="puzzle-content"></div>
+    <div id="puzzle-hint"></div>
+    <div id="puzzle-feedback"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     WIN / LOSE SCREENS
+════════════════════════════════════════════ -->
+<   <h2>YOU ESCAPED!</h2>
+    <p id="win-time"></p>
+    <button onclick="location.reload()">Play Again</button>
+  </div>
+</div>
+
+<div id="lose-screen" class="hidden">
+  <div class="end-card">
+    <div class="end-icon">💀</div>
+    <h2>TIME'S UP!</h2>
+    <p>You didn't escape in time...</p>
+    <button onclick="location.reload()">Try Again</button>
+  </div>
+</div>
+
+<script src="gameState.js" defer></script>
+<script src="timer.js" defer></script>
+<script src="inventory.js" defer></script>
+<script src="numpad.js" defer></script>
+<script src="sequence.js" defer></script>
+<script src="symbol.js" defer></script>
+<script src="room.js" defer></script>
+
+
+</body>
+</html>
