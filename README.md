@@ -1,6 +1,7 @@
 # The Locked Study - Escape Room Game
 
 A browser-based escape room puzzle game built with vanilla JavaScript, HTML, and CSS.
+This project goes beyond a typical starter by shipping a complete, playable escape-room loop—interactive scene, puzzle system, inventory, clues, and win/lose flow—all driven by structured JSON data. It demonstrates real game-state management, multiple puzzle types, and DOM-driven interactions rather than a static template.
 
 ## Features
 

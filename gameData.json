@@ -137,9 +137,6 @@
               "message": "You pry the boards off! Sunlight streams in. You can see a 4-digit number scratched outside: 7392",
               "giveClue": "clue_window",
               "removeItem": "crowbar"
-            },
-            "onFail": {
-              "message": "The boards are nailed tight. You need a tool to pry them off."
             }
           }
         },
