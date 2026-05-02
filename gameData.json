@@ -214,7 +214,8 @@
             "action": "SEARCH",
             "onSuccess": {
               "setState": "searched",
-              "message": "The drawer is empty. Nothing useful here."
+              "message": "You find a crowbar tucked behind the drawer.",
+              "giveItem": "crowbar"
             }
           }
         },
@@ -269,8 +270,8 @@
       "hint": "Look around the room for number clues.",
       "onSolve": {
         "setState": { "objectId": "safe", "state": "open" },
-        "giveItem": "crowbar",
-        "message": "Click! The safe opens. Inside you find a crowbar!"
+        "giveItem": "scrap_note",
+        "message": "Click! The safe opens. Inside you find a scrap note."
       }
     },
 
