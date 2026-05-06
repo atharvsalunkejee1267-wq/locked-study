@@ -30,7 +30,7 @@ const GameState = (() => {
     const res = await fetch('gameData.json');
     data = await res.json();
 
-    // Init object states from data
+    
     for (const [id, obj] of Object.entries(data.objects)) {
       state.objectStates[id] = obj.state;
     }
