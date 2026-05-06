@@ -1,9 +1,9 @@
 
 
-/* ── Google Fonts ── */
+
 @import url('https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Bebas+Neue&display=swap');
 
-/* ── Reset & Base ── */
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -32,7 +32,7 @@ html, body {
   overflow: hidden;
 }
 
-/* ── TOP BAR ── */
+
 #topbar {
   display: flex;
   align-items: center;
@@ -74,13 +74,13 @@ html, body {
   color: var(--text-muted);
 }
 
-/* ── GAME LAYOUT ── */
+
 #game-layout {
   display: flex;
   height: calc(100vh - 52px - 44px);
 }
 
-/* ── ROOM WRAP ── */
+
 #room-wrap {
   flex: 1;
   position: relative;
@@ -92,11 +92,11 @@ html, body {
   width: 100%;
   height: 100%;
 
-  /* Full room image with wall and floor combined */
+  
   background: url('lbrm_mriz_141217.jpg') center center / cover no-repeat;
 }
 
-/* ── ROOM OBJECTS (clickable) ── */
+
 .room-object {
   position: absolute;
   cursor: pointer;
@@ -120,10 +120,10 @@ html, body {
   filter: none;
 }
 
-/* ── OBJECT GRAPHICS ── */
+
 .obj-graphic { width: 100%; height: 100%; position: relative; }
 
-/* DOOR */
+
 .door-graphic {
   background:
     linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)),
@@ -150,7 +150,7 @@ html, body {
   transform-origin: left;
 }
 
-/* BOARDED WINDOW */
+
 .window-frame {
   width: 100%; height: 100%;
   background:
@@ -183,7 +183,7 @@ html, body {
   display: none;
 }
 
-/* BOOKSHELF */
+
 .shelf-graphic {
   background: linear-gradient(90deg, var(--wood-dark), var(--wood));
   border: 3px solid var(--wood-dark);
@@ -216,7 +216,7 @@ html, body {
 .b-yellow { background: linear-gradient(180deg, #ccaa00, #997700); }
 .b-white  { background: linear-gradient(180deg, #e8e0d0, #c8c0b0); }
 
-/* TOOLBOX */
+
 .toolbox-graphic { display: flex; flex-direction: column; }
 .toolbox-lid {
   height: 30%;
@@ -243,7 +243,7 @@ html, body {
 }
 #obj-toolbox[data-state="open"] .toolbox-lid { transform: rotateX(-120deg); transform-origin: top; }
 
-/* SAFE */
+
 .safe-graphic {
   background: linear-gradient(135deg, #444, #222);
   border: 3px solid #333;
@@ -282,7 +282,7 @@ html, body {
   font-weight: 700;
 }
 
-/* VASE */
+
 .vase-graphic { position: relative; }
 .vase-body {
   position: absolute;
@@ -306,7 +306,7 @@ html, body {
 }
 #obj-vase[data-state="broken"] .vase-neck { opacity: 0; }
 
-/* DESK */
+
 .desk-graphic { position: relative; }
 .desk-top {
   position: absolute;
@@ -342,7 +342,7 @@ html, body {
   border-radius: 2px;
 }
 
-/* KEY HOOK */
+
 .keyhook-graphic { position: relative; }
 .hook-plate {
   position: absolute;
@@ -368,7 +368,7 @@ html, body {
 }
 #obj-key_hook[data-state="empty"] .key-hanging { opacity: 0; }
 
-/* ARMCHAIR DECORATION */
+
 .decoration { position: absolute; z-index: 1; }
 .chair-back {
   position: absolute;
@@ -396,7 +396,7 @@ html, body {
 .chair-arm.left-arm  { left: 0; }
 .chair-arm.right-arm { right: 0; }
 
-/* WALL PAINTING CLUE */
+
 .wall-painting {
   pointer-events: none;
 }
@@ -440,7 +440,7 @@ html, body {
   color: #f4d173;
 }
 
-/* ── TOOLTIP ── */
+
 #tooltip {
   position: absolute;
   background: rgba(10,10,14,0.92);
@@ -458,7 +458,7 @@ html, body {
   font-family: 'Courier Prime', monospace;
 }
 
-/* ── INVENTORY PANEL ── */
+
 #inventory-panel {
   width: 120px;
   background: var(--ui-bg);
@@ -562,7 +562,7 @@ html, body {
   color: #555;
 }
 
-/* ── MESSAGE BAR ── */
+
 #message-bar {
   height: 44px;
   background: #0e1012;
@@ -580,7 +580,7 @@ html, body {
   transition: opacity 0.3s;
 }
 
-/* ── PUZZLE OVERLAY ── */
+
 #puzzle-overlay {
   position: fixed;
   inset: 0;
@@ -635,7 +635,7 @@ html, body {
 
 #puzzle-content { margin-bottom: 16px; }
 
-/* ── NUMPAD PUZZLE ── */
+
 .numpad-display {
   display: flex;
   gap: 8px;
@@ -676,7 +676,7 @@ html, body {
 .numpad-btn.delete { color: var(--danger); }
 .numpad-btn.enter  { color: var(--success); font-weight: 700; }
 
-/* ── SEQUENCE PUZZLE (books) ── */
+
 .book-row {
   display: flex;
   gap: 10px;
@@ -724,7 +724,7 @@ html, body {
 }
 .book-slot.drag-over { border-color: var(--accent); background: rgba(232,184,75,0.1); }
 
-/* ── SYMBOL PUZZLE ── */
+
 .symbol-options {
   display: flex;
   gap: 10px;
@@ -763,7 +763,7 @@ html, body {
   justify-content: center;
 }
 
-/* ── PUZZLE FEEDBACK ── */
+
 #puzzle-hint {
   font-size: 11px;
   color: var(--text-muted);
@@ -798,7 +798,7 @@ html, body {
 }
 .puzzle-submit-btn:hover { background: var(--wood); }
 
-/* ── WIN / LOSE SCREENS ── */
+
 #win-screen, #lose-screen {
   position: fixed;
   inset: 0;
@@ -845,7 +845,6 @@ html, body {
 }
 .end-card button:hover { background: var(--wood); }
 
-/* ── SCROLLBAR ── */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--ui-border); border-radius: 2px; }
