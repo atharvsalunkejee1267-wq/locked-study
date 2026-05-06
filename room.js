@@ -1,8 +1,3 @@
-
-
-/* ─────────────────────────────────────────────
-   PUZZLE MANAGER
-───────────────────────────────────────────── */
 const PuzzleManager = (() => {
   const overlay = () => document.getElementById('puzzle-overlay');
 
@@ -73,11 +68,9 @@ function handleObjectClick(objectId) {
   const interaction = objData.interactions?.[currentState] || stateConfig?.onInteract;
   const selectedItem = GameState.getSelectedItem();
 
-  // Interaction (requires item or search)
   if (interaction) {
     const act = interaction;
 
-    // Direct actions
     if (act.action === 'WIN') {
       GameState.win();
       return;
@@ -87,7 +80,6 @@ function handleObjectClick(objectId) {
       return;
     }
 
-    // SEARCH (no item needed)
     if (act.action === 'SEARCH') {
       const s = act.onSuccess || {};
       if (s.setState) {
@@ -101,10 +93,8 @@ function handleObjectClick(objectId) {
       return;
     }
 
-    // Item-required actions
     if (act.requireItem) {
       if (selectedItem === act.requireItem) {
-        // SUCCESS
         const s = act.onSuccess || {};
         if (s.setState) {
           GameState.setObjectState(objectId, s.setState);
@@ -115,14 +105,12 @@ function handleObjectClick(objectId) {
         if (s.giveClue)    GameState.addClue(s.giveClue);
         if (s.message)     Inventory.showMessage(`✅ ${s.message}`, 5000);
       } else {
-        // FAIL
         Inventory.showMessage(act.onFail?.message || "That doesn't work here.");
       }
       return;
     }
   }
 
-  // Nothing applicable — show tooltip text as message
   if (stateConfig?.tooltip) {
     Inventory.showMessage(stateConfig.tooltip, 3000);
   }
@@ -185,10 +173,8 @@ async function bootGame() {
 
   Timer.start(data.meta.timerSeconds);
 
-  // Subscribe to object state changes to update DOM
   GameState.on('objectStateChange', ({ objectId, newState }) => {
     updateObjectEl(objectId, newState);
-    // Check win condition on door open
     if (objectId === 'door' && newState === 'open') {
       setTimeout(() => GameState.win(), 400);
     }
