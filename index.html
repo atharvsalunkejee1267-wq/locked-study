@@ -19,13 +19,9 @@
 
 <div id="game-layout">
 
-  <!-- ROOM SCENE -->
   <div id="room-wrap">
     <div id="room-scene">
 
-      <!-- SVG-drawn room objects (rendered by room.js) -->
-
-      <!-- BOARDED WINDOW -->
       <div class="room-object" id="obj-boarded_window"
            data-id="boarded_window" data-state="boarded"
            style="left:15%;top:18%;width:20%;height:38%">
@@ -40,7 +36,6 @@
         </div>
       </div>
 
-      <!-- DOOR -->
       <div class="room-object" id="obj-door"
            data-id="door" data-state="locked"
            style="left:41%;top:15%;width:14%;height:54%">
@@ -51,7 +46,6 @@
         </div>
       </div>
 
-      <!-- BOOKSHELF -->
       <div class="room-object" id="obj-bookshelf"
            data-id="bookshelf" data-state="intact"
            style="left:58%;top:36%;width:12%;height:53%">
@@ -70,7 +64,6 @@
         </div>
       </div>
 
-      <!-- TOOLBOX -->
       <div class="room-object" id="obj-toolbox"
            data-id="toolbox" data-state="closed"
            style="left:71%;top:75%;width:11%;height:13%">
@@ -82,7 +75,6 @@
         </div>
       </div>
 
-      <!-- SAFE  -->
       <div class="room-object" id="obj-safe"
            data-id="safe" data-state="locked"
            style="left:24%;top:62%;width:11%;height:22%">
@@ -94,7 +86,6 @@
         </div>
       </div>
 
-      <!-- VASE -->
       <div class="room-object" id="obj-vase"
            data-id="vase" data-state="intact"
            style="left:12%;top:58%;width:5%;height:18%">
@@ -104,7 +95,6 @@
         </div>
       </div>
 
-      <!-- DESK -->
       <div class="room-object" id="obj-desk"
            data-id="desk" data-state="unsearched"
            style="left:4%;top:67%;width:18%;height:16%">
@@ -116,7 +106,6 @@
         </div>
       </div>
 
-      <!-- KEY HOOK -->
       <div class="room-object" id="obj-key_hook"
            data-id="key_hook" data-state="has_key"
            style="left:90%;top:35%;width:4%;height:8%">
@@ -127,7 +116,6 @@
         </div>
       </div>
 
-      <!-- WALL PAINTING CLUE (for toolbox symbols) -->
       <div class="decoration wall-painting"
            style="left:73%;top:24%;width:14%;height:20%"
            aria-label="Wall painting with highlighted symbols">
@@ -143,11 +131,10 @@
         </div>
       </div>
 
-      <!-- TOOLTIP -->
       <div id="tooltip"></div>
 
-    </div><!-- /room-scene -->
-  </div><!-- /room-wrap -->
+    </div>
+  </div>
 
   <div id="inventory-panel">
     <div id="inv-title">ITEMS</div>
@@ -159,7 +146,7 @@
     </div>
   </div>
 
-</div><!-- /game-layout -->
+</div>
 
 <div id="message-bar">
   <span id="message-text">Click on objects to explore the room...</span>
